@@ -243,9 +243,10 @@ class StudioHandler(SimpleHTTPRequestHandler):
 def main():
     parser=argparse.ArgumentParser(description="Creator Recording Studio - local only")
     parser.add_argument("--port",type=int,default=8765)
+    parser.add_argument("--host",default="127.0.0.1")
     parser.add_argument("--no-browser",action="store_true")
     args=parser.parse_args()
-    server=ThreadingHTTPServer(("127.0.0.1",args.port),StudioHandler)
+    server=ThreadingHTTPServer((args.host,args.port),StudioHandler)
     url=f"http://localhost:{args.port}"
     print("\nCREATOR RECORDING STUDIO")
     print("Open:",url)
