@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a1019" />
+  <title>FrameLab · Local Creator Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%230d161f' width='100' height='100' rx='22'/%3E%3Ccircle fill='%2358ead1' cx='50' cy='50' r='26'/%3E%3Ccircle fill='%230d161f' cx='50' cy='50' r='12'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark"><span></span></div><div><strong>fram<span>e</span>lab</strong><small>CREATOR STUDIO / LOCAL</small></div></div>
+      <div class="header-right"><span class="local-tag"><span class="dot green"></span> LOCAL RECORDING</span><span class="header-divider"></span><span class="version">V1.0 • MVP</span></div>
+    </header>
+
+    <main class="main">
+      <section class="setup-bar" id="setupBar">
+        <div class="setup-text"><div class="setup-icon">01</div><div><b>Set up your session</b><small>Simulated scripts, real camera monitoring.</small></div></div>
+        <label class="field"><span>PRODUCT NAME</span><input id="productName" type="text" maxlength="90" value="Glow Serum" placeholder="e.g. Glow Serum" /></label>
+        <label class="field feature-field"><span>PRODUCT BENEFIT / MESSAGE</span><input id="sellingPoint" type="text" maxlength="180" value="easy to include in a daily routine" placeholder="e.g. convenient for daily use" /></label>
+        <button class="subtle-btn" id="applyProduct">Update scripts ↗</button>
+      </section>
+
+      <div class="workspace">
+        <section class="camera-area">
+          <div class="panel-heading"><div><span class="section-kicker">CAMERA / LIVE MONITOR</span><h2>Recording stage</h2></div><div class="panel-heading-right"><span class="chip" id="engineChip"><span class="dot muted"></span> Vision idle</span><span class="chip" id="cameraChip">Camera off</span></div></div>
+
+          <div class="camera-stage">
+            <div class="stage-sheen"></div>
+            <div class="stage-left"><span class="rot-label">FRAMING PREVIEW</span><div class="stage-tip">9:16 portrait output<br />Audio + video recorded</div></div>
+            <div class="preview-frame" id="previewFrame">
+              <canvas id="cameraCanvas" width="540" height="960" aria-label="Live portrait camera preview"></canvas>
+              <canvas id="guideCanvas" width="540" height="960" aria-label="Framing guides and product selection"></canvas>
+              <div class="preview-placeholder" id="placeholder"><div class="aperture"><div class="aperture-inner"></div></div><b>Camera is off</b><span>Start your camera to see<br />the framing guide.</span></div>
+              <div class="preview-top"><span id="previewBadge">PREVIEW</span><span id="previewResolution">9:16</span></div>
+              <div class="preview-footer"><div class="audio-meter"><span>MIC</span><div class="meter-track"><div id="audioBar"></div></div></div><div id="stageTimer">00:00</div></div>
+              <div class="live-banner" id="liveBanner" hidden></div>
+            </div>
+            <div class="stage-right"><span class="scale-notch">—</span><span class="scale-notch">—</span><span class="scale-notch">—</span><span class="scale-notch">—</span><span class="scale-notch">—</span><div>FRAME<br/>SAFE ZONE</div></div>
+          </div>
+
+          <div class="controls-panel">
+            <div class="control-row">
+              <button class="btn btn-secondary" id="cameraButton"><span class="btn-symbol">◉</span> Start camera</button>
+              <button class="btn btn-primary" id="recordButton" disabled><span class="record-dot"></span> Start recording</button>
+            </div>
+            <div class="control-row subcontrols"><div class="left-actions"><button id="pauseButton" class="minimal-btn" disabled>Ⅱ Pause</button><button id="finishScriptButton" class="minimal-btn" disabled>✓ Finish script</button><button id="retakeButton" class="minimal-btn" disabled>↺ Retake now</button></div><button id="doneButton" class="btn btn-done" disabled>■ Done & save</button></div>
+            <div class="helper-line" id="helperLine"><span class="pulse-circle"></span> Start your camera, then hold the product in view. Detection and alignment start automatically.</div>
+          </div>
+          <div class="status-note" id="alertPanel" hidden><div class="alert-icon">!</div><div><b id="alertTitle">Adjustment needed</b><p id="alertBody"></p></div></div>
+        </section>
+
+        <aside class="sidebar">
+          <section class="side-panel checks-panel"><div class="side-head"><div><span class="section-kicker">LIVE COMPOSITION</span><h2>Frame checklist</h2></div><span id="checkCount" class="counter-badge">0 / 4</span></div>
+            <div class="check-list">
+              <div class="check-row" id="faceRow"><span class="check-icon">○</span><div><b>Face centered</b><small id="faceDetail">Waiting for camera</small></div><span class="check-state" id="faceState">WAIT</span></div>
+              <div class="check-row" id="headRow"><span class="check-icon">○</span><div><b>10% top gap</b><small id="headDetail">Keep space above your head</small></div><span class="check-state" id="headState">WAIT</span></div>
+              <div class="check-row" id="handRow"><span class="check-icon">○</span><div><b>Hand in frame</b><small id="handDetail">Raise product into view</small></div><span class="check-state" id="handState">WAIT</span></div>
+              <div class="check-row" id="productRow"><span class="check-icon">○</span><div><b>Product near hand</b><small id="productDetail">Hold it in view to detect it</small></div><span class="check-state" id="productState">WAIT</span></div>
+            </div>
+            <div class="readiness" id="readyText"><span class="dot muted"></span> Ready when all checks stay green for 2 seconds.</div>
+          </section>
+
+          <section class="side-panel prompt-panel"><div class="side-head"><div><span class="section-kicker">DEMO / SIMULATED AI</span><h2>Teleprompter</h2></div><span class="round-chip" id="scriptNumber">01 / 10</span></div>
+            <div class="script-type" id="scriptLabel">PRODUCT INTRODUCTION</div>
+            <div class="script-window" id="scriptWindow"><div id="scriptText"></div></div>
+            <div class="prompt-meta"><span>EST. 30–40 SECONDS</span><span>TAKE <strong id="takeNumber">1</strong></span></div>
+            <div class="scroll-setting"><label><input type="checkbox" id="autoScroll" checked /> Auto-scroll script</label><div><span>PACE</span><input type="range" min="1" max="5" step="1" value="3" id="scrollPace" aria-label="Teleprompter scroll speed" /></div></div>
+            <div class="script-actions"><button class="btn btn-outline" id="prevScript">← Previous</button><button class="btn btn-outline" id="nextScript">Next script →</button></div>
+            <p class="simulation-notice">Example scripts only. No paid AI service or API key required.</p>
+          </section>
+
+        </aside>
+      </div>
+
+      <div hidden><span id="sessionTimer"></span><span id="recStatus"></span><span id="takeCount"></span><div id="activity"></div></div>
+
+      <section class="saved-panel" id="savedPanel" hidden><div class="saved-symbol">✓</div><div><h2>Session saved successfully</h2><p id="savedDetails">Your local video and detailed take log are ready.</p><div class="saved-actions"><a id="videoLink" target="_blank" rel="noopener" class="btn btn-primary" href="#">↓ Download video</a><a id="metadataLink" class="btn btn-outline" href="#">↓ Download take log</a></div></div></section>
+
+      <section class="previous-panel"><div class="side-head"><div><span class="section-kicker">LOCAL FILES</span><h2>Previous sessions</h2></div><button class="minimal-btn" id="refreshSessions">↻ Refresh</button></div><div id="previousSessions" class="past-list"><span>Checking local session folder…</span></div></section>
+      <footer>FRAMELAB V1 — CAMERA + ALIGNMENT + SIMULATED SCRIPTS + LOCAL VIDEO CAPTURE <span>Built for long-form creator recording</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="retakeModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-icon">↺</div><h2 id="modalTitle">This take needs another pass</h2><p id="modalBody">Your camera alignment or product visibility changed during this script. Recording is continuing in the background.</p><div class="modal-actions"><button class="btn btn-primary" id="confirmRetake">↺ Re-record this script</button><button class="btn btn-outline" id="skipRetake">Continue anyway →</button></div></div></div>
+  <div class="toaster" id="toast" role="status" aria-live="polite"></div>
+  <video id="sourceVideo" autoplay playsinline muted hidden></video>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

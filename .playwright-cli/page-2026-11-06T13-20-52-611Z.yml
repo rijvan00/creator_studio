@@ -1,0 +1,169 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e7]:
+      - strong [ref=e8]: framelab
+      - generic [ref=e9]: CREATOR STUDIO / LOCAL
+    - generic [ref=e10]:
+      - generic [ref=e11]: LOCAL RECORDING
+      - generic [ref=e14]: V1.0 • MVP
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]: PRODUCTION WORKSPACE
+        - heading [level=1] [ref=e20]:
+          - text: Every frame,
+          - emphasis [ref=e21]: on point.
+        - paragraph [ref=e22]: Set your frame. Hold your product. Let the studio watch the details while you focus on the take.
+      - generic [ref=e23]:
+        - text: SESSION TIMER
+        - strong [ref=e24]: 00:00:00
+        - generic [ref=e25]: Not recording
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: "01"
+        - generic [ref=e30]:
+          - generic [ref=e31]: Set up your session
+          - generic [ref=e32]: Simulated scripts, real camera monitoring.
+      - generic [ref=e33]:
+        - generic [ref=e34]: PRODUCT NAME
+        - textbox "PRODUCT NAME" [ref=e35]:
+          - /placeholder: e.g. Glow Serum
+          - text: Glow Serum
+      - generic [ref=e36]:
+        - generic [ref=e37]: PRODUCT BENEFIT / MESSAGE
+        - textbox "PRODUCT BENEFIT / MESSAGE" [ref=e38]:
+          - /placeholder: e.g. convenient for daily use
+          - text: easy to include in a daily routine
+      - button "Update scripts ↗" [ref=e39] [cursor=pointer]
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - text: CAMERA / LIVE MONITOR
+            - heading "Recording stage" [level=2] [ref=e44]
+          - generic [ref=e45]:
+            - generic [ref=e46]: Vision idle
+            - generic [ref=e48]: Camera off
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e51]: FRAMING PREVIEW
+            - generic [ref=e52]: 9:16 portrait outputAudio + video recorded
+          - generic [ref=e53]:
+            - generic "Live portrait camera preview" [ref=e54]
+            - generic "Framing guides and product selection" [ref=e55]
+            - generic:
+              - generic: Camera is off
+              - generic: Start your camera to seethe framing guide.
+            - generic:
+              - generic: PREVIEW
+              - generic: 9:16
+            - generic:
+              - generic: MIC
+              - generic: 00:00
+          - generic [ref=e56]:
+            - generic [ref=e57]: —
+            - generic [ref=e58]: —
+            - generic [ref=e59]: —
+            - generic [ref=e60]: —
+            - generic [ref=e61]: —
+            - generic [ref=e62]: FRAMESAFE ZONE
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - button "◉ Start camera" [ref=e65] [cursor=pointer]
+            - button "◎ Alignment active" [disabled] [ref=e66]
+            - button "▣ Mark product" [disabled] [ref=e67]
+            - button "Start recording" [disabled] [ref=e68]
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - button "Ⅱ Pause" [disabled] [ref=e72]
+              - button "✓ Finish script" [disabled] [ref=e73]
+              - button "↺ Retake now" [disabled] [ref=e74]
+            - button "■ Done & save" [disabled] [ref=e75]
+          - generic [ref=e76]: Start your camera, then hold the product in view. Detection and alignment start automatically.
+      - complementary [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - text: LIVE COMPOSITION
+              - heading "Frame checklist" [level=2] [ref=e82]
+            - generic [ref=e83]: 0 / 4
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]: ○
+              - generic [ref=e87]:
+                - generic [ref=e88]: Face centered
+                - generic [ref=e89]: No face detected
+              - generic [ref=e90]: WAIT
+            - generic [ref=e91]:
+              - generic [ref=e92]: ○
+              - generic [ref=e93]:
+                - generic [ref=e94]: Correct headroom
+                - generic [ref=e95]: Leave space above your hair
+              - generic [ref=e96]: WAIT
+            - generic [ref=e97]:
+              - generic [ref=e98]: ○
+              - generic [ref=e99]:
+                - generic [ref=e100]: Hand in frame
+                - generic [ref=e101]: Show a hand holding the product
+              - generic [ref=e102]: WAIT
+            - generic [ref=e103]:
+              - generic [ref=e104]: ○
+              - generic [ref=e105]:
+                - generic [ref=e106]: Product near hand
+                - generic [ref=e107]: Hold the product in a visible hand
+              - generic [ref=e108]: WAIT
+          - generic [ref=e109]: Ready when all checks stay green for 2 seconds.
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - text: DEMO / SIMULATED AI
+              - heading "Teleprompter" [level=2] [ref=e114]
+            - generic [ref=e115]: 01 / 10
+          - generic [ref=e116]: ROUND 1 · THE INTRODUCTION
+          - generic [ref=e117]: Let me show you Glow Serum. If you have come across this and wondered what it actually looks like, here is a closer view. I'm holding it up so you can see the size, the packaging, and the details. One thing worth discussing is easy to include in a daily routine. Let's look at it clearly, rather than just making a claim without showing anything.
+          - generic [ref=e119]:
+            - generic [ref=e120]: EST. 30–40 SECONDS
+            - generic [ref=e121]:
+              - text: TAKE
+              - strong [ref=e122]: "1"
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - checkbox "Auto-scroll script" [checked] [ref=e125]
+              - text: Auto-scroll script
+            - generic [ref=e126]:
+              - generic [ref=e127]: PACE
+              - slider "Teleprompter scroll speed" [ref=e128]: "3"
+          - generic [ref=e129]:
+            - button "← Previous" [ref=e130] [cursor=pointer]
+            - button "Next script →" [ref=e131] [cursor=pointer]
+          - paragraph [ref=e132]: Example scripts only. No paid AI service or API key required.
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - text: PRODUCTION NOTES
+              - heading "Session activity" [level=2] [ref=e136]
+            - generic [ref=e137]: 0 takes
+          - generic [ref=e138]: Your takes and alignment alerts will appear here.
+    - generic [ref=e140]:
+      - generic [ref=e141]:
+        - generic [ref=e142]: VIDEO OUTPUT
+        - strong [ref=e143]: 9:16 · WebM
+        - generic [ref=e144]: MP4 export and AI editing come later
+      - generic [ref=e145]:
+        - generic [ref=e146]: SAVED TO
+        - strong [ref=e147]: Local laptop
+        - generic [ref=e148]: Project / recordings folder
+      - generic [ref=e149]:
+        - generic [ref=e150]: RETENTION
+        - strong [ref=e151]: No cloud upload
+        - generic [ref=e152]: Camera and video stay on your machine
+    - generic [ref=e153]:
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - text: LOCAL FILES
+          - heading "Previous sessions" [level=2] [ref=e156]
+        - button "↻ Refresh" [ref=e157] [cursor=pointer]
+      - generic [ref=e158]: No sessions recorded yet.
+    - generic [ref=e159]:
+      - text: FRAMELAB V1 — CAMERA + ALIGNMENT + SIMULATED SCRIPTS + LOCAL VIDEO CAPTURE
+      - generic [ref=e160]: Built for long-form creator recording

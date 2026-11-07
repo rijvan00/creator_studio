@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "sessionId": "session_e39ed7ff7b80471a",
+  "productName": "Glow Serum",
+  "sellingPoint": "easy to include in a daily routine",
+  "recordedAt": "2026-11-07T05:11:44.467Z",
+  "durationMs": 18660,
+  "video": {
+    "format": "webm",
+    "width": 540,
+    "height": 960,
+    "portrait": true,
+    "codec": "video/webm;codecs=vp8,opus",
+    "bytesUploaded": 3515985
+  },
+  "disclaimer": "Product presence uses calibrated appearance matching near a detected hand; not verified object identification.",
+  "takes": [
+    {
+      "takeId": "take-1",
+      "scriptId": "R1-S1",
+      "scriptTitle": "THE INTRODUCTION",
+      "scriptText": "Let me show you Glow Serum. If you have come across this and wondered what it actually looks like, here is a closer view. I'm holding it up so you can see the size, the packaging, and the details. One thing worth discussing is easy to include in a daily routine. Let's look at it clearly, rather than just making a claim without showing anything.",
+      "attempt": 1,
+      "startMs": 1,
+      "warnings": [
+        {
+          "rule": "head",
+          "message": "Headroom is outside the guide",
+          "atMs": 15633
+        }
+      ],
+      "needsRetake": true,
+      "endMs": 18660,
+      "durationMs": 18659,
+      "status": "retake-recommended"
+    }
+  ],
+  "events": [
+    {
+      "type": "info",
+      "message": "Started R1-S1 · take 1",
+      "timeMs": 1,
+      "timeISO": "2026-11-07T05:11:25.793Z",
+      "scriptId": "R1-S1"
+    },
+    {
+      "type": "warning",
+      "message": "Retake flagged: Headroom is outside the guide",
+      "timeMs": 15633,
+      "timeISO": "2026-11-07T05:11:41.424Z",
+      "scriptId": "R1-S1",
+      "rule": "head"
+    },
+    {
+      "type": "info",
+      "message": "R1-S1 · retake-recommended (00:18)",
+      "timeMs": 18660,
+      "timeISO": "2026-11-07T05:11:44.451Z",
+      "scriptId": "R1-S1"
+    }
+  ]
+}

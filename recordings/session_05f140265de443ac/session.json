@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0",
+  "sessionId": "session_05f140265de443ac",
+  "productName": "Glow Serum",
+  "sellingPoint": "easy to include in a daily routine",
+  "recordedAt": "2026-11-07T05:46:59.888Z",
+  "durationMs": 25271,
+  "video": {
+    "format": "webm",
+    "width": 540,
+    "height": 960,
+    "portrait": true,
+    "codec": "video/webm;codecs=vp8,opus",
+    "bytesUploaded": 5140703
+  },
+  "disclaimer": "A supported product class is verified before recording. During recording, rotation is allowed while a hand remains visible; product identity is not continuously verified.",
+  "takes": [
+    {
+      "takeId": "take-1",
+      "scriptId": "R1-S1",
+      "scriptTitle": "THE INTRODUCTION",
+      "scriptText": "Let me show you Glow Serum. If you have come across this and wondered what it actually looks like, here is a closer view. I'm holding it up so you can see the size, the packaging, and the details. One thing worth discussing is easy to include in a daily routine. Let's look at it clearly, rather than just making a claim without showing anything.",
+      "attempt": 1,
+      "startMs": 0,
+      "warnings": [
+        {
+          "rule": "hand",
+          "message": "Your hand is no longer clearly visible",
+          "atMs": 2246
+        },
+        {
+          "rule": "product",
+          "message": "Product appearance could not be confirmed near your hand",
+          "atMs": 2246
+        }
+      ],
+      "needsRetake": true,
+      "endMs": 25271,
+      "durationMs": 25271,
+      "status": "retake-recommended"
+    }
+  ],
+  "events": [
+    {
+      "type": "info",
+      "message": "Started R1-S1 · take 1",
+      "timeMs": 1,
+      "timeISO": "2026-11-07T05:46:34.604Z",
+      "scriptId": "R1-S1"
+    },
+    {
+      "type": "warning",
+      "message": "Retake flagged: Your hand is no longer clearly visible",
+      "timeMs": 2246,
+      "timeISO": "2026-11-07T05:46:36.850Z",
+      "scriptId": "R1-S1",
+      "rule": "hand"
+    },
+    {
+      "type": "warning",
+      "message": "Retake flagged: Product appearance could not be confirmed near your hand",
+      "timeMs": 2246,
+      "timeISO": "2026-11-07T05:46:36.850Z",
+      "scriptId": "R1-S1",
+      "rule": "product"
+    },
+    {
+      "type": "info",
+      "message": "R1-S1 · retake-recommended (00:25)",
+      "timeMs": 25271,
+      "timeISO": "2026-11-07T05:46:59.875Z",
+      "scriptId": "R1-S1"
+    }
+  ]
+}

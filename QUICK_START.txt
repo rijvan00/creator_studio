@@ -1,0 +1,14 @@
+FRAMELAB — LOCAL CREATOR RECORDING STUDIO
+
+1. Install Python 3.9+ if not already installed.
+2. Double-click start.command (Mac) or start.bat (Windows).
+   Or run: python3 server.py
+3. Open Chrome or Edge: http://localhost:8765
+4. Start camera → Hold a supported product near your hand → Wait for all green → Start recording.
+5. Read the sample scripts. Use Finish script / Retake now as needed.
+6. Done & save → recordings/session_.../recording.webm + session.json
+
+First run of vision detection needs an internet connection to download MediaPipe.
+Optional: run python3 setup_offline_models.py once while online to prepare offline mode.
+
+See README.md for troubleshooting and limitations.
