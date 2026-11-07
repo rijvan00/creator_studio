@@ -1,7 +1,6 @@
 /* FrameLab V1 — local recording with on-device MediaPipe face, hand, and COCO product detection.
    AI script generation and teleprompter are deliberately simulated. No user media goes to a cloud API. */
 const $ = (id) => document.getElementById(id);
-const API_BASE = window.__DAWNMATTER_CREATOR_STUDIO_API_BASE__ || '';
 const CANVAS = $('cameraCanvas'), CTX = CANVAS.getContext('2d', {alpha:false});
 const GUIDE = $('guideCanvas'), GCTX = GUIDE.getContext('2d');
 const W=CANVAS.width, H=CANVAS.height;
@@ -24,7 +23,7 @@ const state = {
   productBox:null, productLabel:'', productVerified:false,
   alignmentSince:0, issueSince:{}, lastCheckSeen:{}, lastWarnedAt:{},
   pendingDirection:1, scriptIndex:0, round:1, scripts:[], takeSeq:0, activeTake:null, takes:[], events:[],
-  serverSession:null, seq:0, uploadQueue:Promise.resolve(), uploadedBytes:0, failedUpload:false,
+  chunks:[], recordedBytes:0,
   startedAt:0, pauseStarted:0, pausedAccum:0, finalMs:0, animation:0,
   analyser:null, audioArray:null, audioContext:null, micRms:0, lastAudio:0, lastActivityToast:0
 };
@@ -272,20 +271,13 @@ function retakeNow(){
   finishTake('retake');startTake();toast('Retake started. Keep framing and the product in view.');
 }
 
-async function api(path,options={}){
-  const response=await fetch(`${API_BASE}${path}`,{cache:'no-store',...options});let body;
-  try{body=await response.json();}catch{throw Error('Local recording server returned an invalid response');}
-  if(!response.ok)throw Error(body.error||`Server returned ${response.status}`);
-  return body;
-}
 function preferredMime(){return ['video/webm;codecs=vp8,opus','video/webm;codecs=vp9,opus','video/webm'].find(m=>window.MediaRecorder?.isTypeSupported(m))||'';}
 async function startRecording(){
   if(state.recording||!state.ready||!state.engineReady)return;
   if(!CANVAS.captureStream||!window.MediaRecorder){toast('This browser cannot record canvas video. Please use current Chrome or Edge.',true);return;}
   el.start.disabled=true;
   try{
-    const session=await api('/api/session/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productName:el.productName.value,sellingPoint:el.sellingPoint.value})});
-    state.serverSession=session;state.seq=0;state.uploadQueue=Promise.resolve();state.failedUpload=false;state.uploadedBytes=0;
+    state.chunks=[];state.recordedBytes=0;
     state.outputStream=CANVAS.captureStream(24);
     const tracks=[...state.outputStream.getVideoTracks(),...state.sourceStream.getAudioTracks()];
     if(!state.sourceStream.getAudioTracks().length)throw Error('Microphone missing; record cannot start without audio.');
@@ -294,34 +286,16 @@ async function startRecording(){
     state.recorder=new MediaRecorder(recordStream,{mimeType:mime,videoBitsPerSecond:1800000,audioBitsPerSecond:128000});
     state.recorder.addEventListener('dataavailable',event=>{
       if(!event.data||event.data.size===0)return;
-      const seq=state.seq++;const chunk=event.data;
-      state.uploadQueue=state.uploadQueue.then(()=>uploadChunk(seq,chunk));
+      state.chunks.push(event.data);state.recordedBytes+=event.data.size;
     });
     state.recorder.onerror=(event)=>{showAlert('Recorder error',event.error?.message||'Recorder stopped unexpectedly. Click Done & save.');};
     state.startedAt=performance.now();state.pausedAccum=0;state.pauseStarted=0;
     state.takes=[];state.takeSeq=0;state.events=[];el.activity.innerHTML='';
     state.recording=true;state.paused=false;state.recorder.start(2500);
     startTake();syncControls();
-    toast('Recording started! Video chunks are saving to your local laptop.');
+    toast('Recording started! Your video stays in this browser until you download it.');
     el.readyText.innerHTML='<span class="dot green"></span> Live monitoring is active. Invalid takes will be flagged.';
   }catch(error){console.error(error);showAlert('Recording could not start',error.message||String(error));toast('Start failed: '+error.message,true);syncControls();}
-}
-async function uploadChunk(seq,chunk){
-  const url=`/api/session/${state.serverSession.id}/chunk/${seq}`;
-  for(let retry=0;retry<40;retry++){
-    try{
-      const r=await api(url,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:chunk});
-      state.uploadedBytes+=chunk.size;
-      if(state.failedUpload){state.failedUpload=false;toast('Local save connection restored. Resume when ready.');}
-      return r;
-    }catch(e){
-      if(!state.failedUpload){state.failedUpload=true;
-        if(state.recorder?.state==='recording'){state.recorder.pause();state.paused=true;state.pauseStarted=performance.now();syncControls();}
-        showAlert('Local saving interrupted','The connection to the local Python server was lost. Recording has paused while it retries. Keep this tab open and restart the server if needed.');logEvent('warning','Local server disconnected; recording paused');}
-      if(retry===39)throw Error('Unable to store recording chunk after retries: '+e.message);
-      await new Promise(resolve=>setTimeout(resolve,1800));
-    }
-  }
 }
 async function togglePause(){
   if(!state.recording||state.saving)return;
@@ -329,17 +303,16 @@ async function togglePause(){
     state.recorder.pause();state.paused=true;state.pauseStarted=performance.now();
     logEvent('info','Recording manually paused');toast('Recording paused. Click Resume when ready.');
   }else{
-    if(state.failedUpload){toast('Still reconnecting to the local server. Cannot resume.',true);return;}
     state.pausedAccum+=performance.now()-state.pauseStarted;state.paused=false;state.pauseStarted=0;
     state.recorder.resume();state.issueSince={};logEvent('info','Recording resumed');toast('Recording resumed.');
   }
   syncControls();
 }
 function buildMetadata(){
-  return {schemaVersion:'1.0',sessionId:state.serverSession?.id||null,
+  return {schemaVersion:'1.0',sessionId:null,
     productName:el.productName.value.trim(),sellingPoint:el.sellingPoint.value.trim(),
     recordedAt:new Date().toISOString(),durationMs:state.finalMs,
-    video:{format:'webm',width:W,height:H,portrait:true,codec:state.recorder?.mimeType||'',bytesUploaded:state.uploadedBytes},
+    video:{format:'webm',width:W,height:H,portrait:true,codec:state.recorder?.mimeType||'',bytesRecorded:state.recordedBytes},
     disclaimer:'A supported product class is verified before recording. During recording, rotation is allowed while a hand remains visible; product identity is not continuously verified.',
     takes:state.takes,events:state.events};
 }
@@ -349,8 +322,8 @@ async function doneAndSave(){
   if(state.activeTake)finishTake();
   state.recording=false;state.paused=false;el.retakeModal.hidden=true;syncControls();
   $('sessionTimer').textContent=formatClock(state.finalMs,true);
-  $('recStatus').innerHTML='<span class="dot muted"></span> Finalizing local files…';
-  showAlert('Finalizing recording','Closing the video and writing your take/timestamp log to the recordings folder. Keep this tab open until the confirmation appears.');
+  $('recStatus').innerHTML='<span class="dot muted"></span> Preparing download…';
+  showAlert('Preparing download','Closing the recording and creating a download in your browser. Keep this tab open until the confirmation appears.');
   try{
     const recorder=state.recorder;
     if(recorder&&recorder.state!=='inactive')await new Promise((resolve,reject)=>{
@@ -358,33 +331,19 @@ async function doneAndSave(){
       recorder.addEventListener('error',()=>reject(Error('Recorder stopped with an error')),{once:true});
       recorder.stop();
     });
-    await state.uploadQueue;
-    if(!state.seq)throw Error('No non-empty video chunks were recorded');
+    if(!state.chunks.length)throw Error('No video was recorded');
     const metadata=buildMetadata();
-    const result=await api(`/api/session/${state.serverSession.id}/finish`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lastChunk:state.seq-1,metadata})});
-    hideAlert();$('savedPanel').hidden=false;$('savedDetails').textContent=`Saved ${Math.round(result.bytes/1024/1024)} MB + ${state.takes.length} takes in ${result.storage}.`;
-    $('videoLink').href=result.videoUrl;$('metadataLink').href=result.metadataUrl;
-    logEvent('info','Recording and session log saved locally');toast('Saved locally! Video and session log are ready.');await refreshSessions();
+    const stamp=new Date().toISOString().replace(/[:.]/g,'-');
+    const video=new Blob(state.chunks,{type:recorder?.mimeType||'video/webm'});
+    $('videoLink').href=URL.createObjectURL(video);$('videoLink').download=`framelab-${stamp}.webm`;
+    const log=new Blob([JSON.stringify(metadata,null,2)],{type:'application/json'});
+    $('metadataLink').href=URL.createObjectURL(log);$('metadataLink').download=`framelab-${stamp}.json`;
+    hideAlert();$('savedPanel').hidden=false;$('savedDetails').textContent=`Ready to download: ${(video.size/1024/1024).toFixed(1)} MB + ${state.takes.length} takes.`;
+    logEvent('info','Recording ready to download');toast('Recording ready to download.');
     $('savedPanel').scrollIntoView({behavior:'smooth',block:'center'});
-  }catch(error){console.error(error);showAlert('Save did not finish',`${error.message}. Your received video chunks remain in the recordings folder as recording.webm.part. Use “Recover” in Previous sessions if needed.`);toast('Could not finalize video; see recovery option.',true);await refreshSessions();}
+  }catch(error){console.error(error);showAlert('Download could not be prepared',error.message||String(error));toast('Could not prepare the download.',true);}
   finally{state.saving=false;state.outputStream?.getTracks().forEach(t=>t.stop());state.startedAt=0;syncControls();}
 }
-async function refreshSessions(){
-  try{
-    const data=await api('/api/sessions');const list=$('previousSessions');list.innerHTML='';
-    if(!data.items.length){list.textContent='No sessions recorded yet.';return;}
-    for(const s of data.items){
-      const row=document.createElement('div');row.className='past-item';
-      const left=document.createElement('div'),name=document.createElement('strong'),detail=document.createElement('small');
-      name.textContent=s.productName||'Untitled session';detail.textContent=`${s.status} · ${new Date(s.createdAt).toLocaleString()} · ${(s.size/1024/1024).toFixed(1)} MB`;
-      left.append(name,detail);row.append(left);
-      if(s.hasVideo){const a=document.createElement('a');a.href=`/api/session/${s.id}/video`;a.textContent='Download video ↓';row.append(a);}
-      else if(s.hasPartial&&s.chunks){const btn=document.createElement('button');btn.textContent='Recover partial video';btn.addEventListener('click',async()=>{if(state.recording){toast('Finish the active recording before recovering a previous file.',true);return;}try{await api(`/api/session/${s.id}/recover`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});toast('Partial video recovered. Playback is not guaranteed.');await refreshSessions();}catch(err){toast(err.message,true);}});row.append(btn);}
-      list.append(row);
-    }
-  }catch(error){$('previousSessions').textContent='Cannot read local sessions. Make sure the Python server is running.';}
-}
-
 el.camera.addEventListener('click',startCamera);
 el.start.addEventListener('click',startRecording);
 el.pause.addEventListener('click',togglePause);
@@ -396,8 +355,7 @@ el.prev.addEventListener('click',()=>finishAndNext(-1));
 el.apply.addEventListener('click',()=>{state.scriptIndex=0;state.round=1;buildScripts();toast('Sample scripts updated.');});
 $('confirmRetake').addEventListener('click',()=>{el.retakeModal.hidden=true;startTake();toast('Re-recording the same script.');});
 $('skipRetake').addEventListener('click',()=>{el.retakeModal.hidden=true;advanceScript(state.pendingDirection);toast('Take kept with a retake warning in the session log.');});
-$('refreshSessions').addEventListener('click',refreshSessions);
 window.addEventListener('beforeunload',ev=>{if(state.recording||state.saving){ev.preventDefault();ev.returnValue='';}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.recording&&!state.paused){logEvent('warning','Browser tab hidden: video frames may freeze in background');if(state.activeTake){state.activeTake.needsRetake=true;state.activeTake.warnings.push({rule:'tab-hidden',message:'Tab moved to background',atMs:msElapsed()});}}});
 
-buildScripts();updateChecklist();syncControls();refreshSessions();
+buildScripts();updateChecklist();syncControls();

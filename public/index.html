@@ -46,7 +46,7 @@
               <button class="btn btn-secondary" id="cameraButton"><span class="btn-symbol">◉</span> Start camera</button>
               <button class="btn btn-primary" id="recordButton" disabled><span class="record-dot"></span> Start recording</button>
             </div>
-            <div class="control-row subcontrols"><div class="left-actions"><button id="pauseButton" class="minimal-btn" disabled>Ⅱ Pause</button><button id="finishScriptButton" class="minimal-btn" disabled>✓ Finish script</button><button id="retakeButton" class="minimal-btn" disabled>↺ Retake now</button></div><button id="doneButton" class="btn btn-done" disabled>■ Done & save</button></div>
+            <div class="control-row subcontrols"><div class="left-actions"><button id="pauseButton" class="minimal-btn" disabled>Ⅱ Pause</button><button id="finishScriptButton" class="minimal-btn" disabled>✓ Finish script</button><button id="retakeButton" class="minimal-btn" disabled>↺ Retake now</button></div><button id="doneButton" class="btn btn-done" disabled>■ Done & download</button></div>
             <div class="helper-line" id="helperLine"><span class="pulse-circle"></span> Start your camera, then hold the product in view. Detection and alignment start automatically.</div>
           </div>
           <div class="status-note" id="alertPanel" hidden><div class="alert-icon">!</div><div><b id="alertTitle">Adjustment needed</b><p id="alertBody"></p></div></div>
@@ -77,9 +77,7 @@
 
       <div hidden><span id="sessionTimer"></span><span id="recStatus"></span><span id="takeCount"></span><div id="activity"></div></div>
 
-      <section class="saved-panel" id="savedPanel" hidden><div class="saved-symbol">✓</div><div><h2>Session saved successfully</h2><p id="savedDetails">Your local video and detailed take log are ready.</p><div class="saved-actions"><a id="videoLink" target="_blank" rel="noopener" class="btn btn-primary" href="#">↓ Download video</a><a id="metadataLink" class="btn btn-outline" href="#">↓ Download take log</a></div></div></section>
-
-      <section class="previous-panel"><div class="side-head"><div><span class="section-kicker">LOCAL FILES</span><h2>Previous sessions</h2></div><button class="minimal-btn" id="refreshSessions">↻ Refresh</button></div><div id="previousSessions" class="past-list"><span>Checking local session folder…</span></div></section>
+      <section class="saved-panel" id="savedPanel" hidden><div class="saved-symbol">✓</div><div><h2>Recording ready</h2><p id="savedDetails">Download the video and take log before leaving this page.</p><div class="saved-actions"><a id="videoLink" class="btn btn-primary" href="#">↓ Download video</a><a id="metadataLink" class="btn btn-outline" href="#">↓ Download take log</a></div></div></section>
       <footer>FRAMELAB V1 — CAMERA + ALIGNMENT + SIMULATED SCRIPTS + LOCAL VIDEO CAPTURE <span>Built for long-form creator recording</span></footer>
     </main>
   </div>
